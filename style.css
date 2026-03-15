@@ -218,6 +218,12 @@ body {
   margin-bottom: 0.7rem;
 }
 
+.job-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
 .job-title {
   font-size: 0.95rem;
   font-weight: 500;
@@ -244,7 +250,6 @@ body {
 .job-date, .job-location {
   font-size: 0.78rem;
   color: var(--text-muted);
-  white-space: nowrap;
 }
 
 .job-bullets {
@@ -466,7 +471,7 @@ body {
 }
 
 .edu-logo {
-  height: 44px;
+  height: 30px;
   width: auto;
   max-width: 160px;
   object-fit: contain;
@@ -488,6 +493,28 @@ body {
 img[alt="Element Logic"] {
   height: 64px;
   max-width: 200px;
+}
+
+/* Hero Tolk is very wide — constrain width, let height follow */
+img[alt="Hero Tolk"] {
+  height: auto;
+  width: 100px;
+  max-width: 200px;
+}
+
+/* UiS logo is tall/portrait — cap height */
+img[alt="University of Stavanger"],
+img[alt="Universitetet i Stavanger"] {
+  height: 70px;
+  width: auto;
+  max-width: 100px;
+}
+
+/* OsloMet logo is very large — cap it */
+img[alt="OsloMet"] {
+  height: 70px;
+  width: auto;
+  max-width: 120px;
 }
 
 /* ===========================
