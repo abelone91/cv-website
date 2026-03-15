@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Highlights — Abel Arrouj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .gantt-page {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 4rem 3rem 3rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .page-title {
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .page-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--text-primary);
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Outer flex: chart + side panel */
+    .gantt-layout {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    /* Chart wrapper */
+    .gantt-wrapper {
+      flex: 1;
+      min-width: 0;
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.5rem 2rem;
+    }
+
+    .gantt-inner {
+      min-width: 700px;
+      position: relative;
+    }
+
+    /* Year axis */
+    .gantt-axis {
+      position: relative;
+      height: 24px;
+      margin-bottom: 0.5rem;
+      padding-left: 210px;
+    }
+    .gantt-year-label {
+      position: absolute;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-left: 1px solid var(--border);
+      padding-left: 4px;
+    }
+    .gantt-year-label.current-year {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Grid lines */
+    .gantt-grid-lines {
+      position: absolute;
+      top: 0;
+      left: 210px;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+    .gantt-grid-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+      opacity: 0.6;
+    }
+
+    /* Rows */
+    .gantt-rows { position: relative; }
+
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      transition: background 0.15s;
+    }
+    .gantt-row:last-child { border-bottom: none; }
+    .gantt-row:nth-child(even) { background: rgba(0,0,0,0.018); }
+    .gantt-row.active {
+      background: var(--accent-light) !important;
+    }
+    .gantt-row.active .gantt-row-label-main { color: var(--text-primary); font-weight: 500; }
+
+    /* Labels */
+    .gantt-row-label {
+      width: 210px;
+      flex-shrink: 0;
+      padding-right: 1rem;
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: inherit;
+    }
+    .gantt-row:nth-child(even) .gantt-row-label { background: rgba(249,249,247,0.98); }
+    .gantt-row.active .gantt-row-label { background: var(--accent-light); }
+
+    .gantt-row-label-main {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .gantt-row-label-sub {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+      margin-top: 1px;
+    }
+
+    .gantt-bar-area {
+      flex: 1;
+      position: relative;
+      height: 48px;
+    }
+
+    /* Bars */
+    @keyframes bar-breathe {
+      0%   { box-shadow: none; }
+      50%  { box-shadow: 0 0 0 2px rgba(255,255,255,0.8), 0 0 0 4px rgba(0,0,0,0.2); }
+      100% { box-shadow: none; }
+    }
+
+    .gantt-bar {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: height 0.15s, box-shadow 0.15s;
+      animation: bar-breathe 1.4s ease-in-out 0.8s 2;
+    }
+    .gantt-bar:hover, .gantt-bar.active {
+      height: 22px;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.9), 0 0 0 4px currentColor;
+    }
+
+    /* Employer group separator */
+    .gantt-row.group-start {
+      border-top: 2px solid var(--border);
+    }
+
+    .bar-drager  { background: #3b82f6; }
+    .bar-element { background: #10b981; }
+    .bar-accella { background: #d97706; }
+    .bar-nokut   { background: #8b5cf6; }
+
+    /* ── Side panel ── */
+    .gantt-detail {
+      width: 280px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 80px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+      padding: 1.2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      align-self: flex-start;
+    }
+    .gantt-detail.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1;
+      padding: 2px 4px;
+    }
+    .detail-close:hover { color: var(--text-primary); }
+
+    .detail-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
+      padding-right: 1.5rem;
+    }
+    .detail-date {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+    .detail-bullets {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 0.8rem;
+    }
+    .detail-bullets li {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      padding-left: 0.9rem;
+      position: relative;
+      line-height: 1.55;
+      margin-bottom: 0.2rem;
+    }
+    .detail-bullets li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+    }
+    .detail-media {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+    .detail-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      margin-top: 0.2rem;
+      text-decoration: none;
+    }
+    .detail-link:hover { background: #bfdbfe; }
+
+    /* ── Mobile card list ── */
+    .gantt-mobile-list {
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .mobile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      border-left-width: 3px;
+      overflow: hidden;
+    }
+    .mobile-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .mobile-card-header:hover { background: var(--bg); }
+    .mobile-card-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .mobile-card-date {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .mobile-card-body {
+      display: none;
+      padding: 0 1rem 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+    .mobile-card.open .mobile-card-body { display: block; }
+    .mobile-card-body ul {
+      list-style: none;
+      padding: 0.6rem 0 0;
+      margin: 0;
+    }
+    .mobile-card-body li {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      padding-left: 0.9rem;
+      position: relative;
+      line-height: 1.5;
+      margin-bottom: 0.2rem;
+    }
+    .mobile-card-body li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+    }
+    .mobile-card-body img,
+    .mobile-card-body video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-top: 0.6rem;
+      border: 1px solid var(--border);
+    }
+    .mobile-card-body a {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .gantt-layout   { display: none; }
+      .legend         { display: none; }
+      .gantt-mobile-list { display: flex; }
+      .page-subtitle  { margin-bottom: 1.2rem; }
+    }
+
+    @media (max-width: 900px) and (min-width: 641px) {
+      .gantt-detail   { display: none; }
+      .gantt-axis     { padding-left: 140px; }
+      .gantt-grid-lines { left: 140px; }
+      .gantt-row-label { width: 140px; }
+    }
+
+    @media (max-width: 720px) {
+      .gantt-page { padding: 3rem 1rem 2rem; }
+      .page-title { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lang-toggle">
+    <a href="career-highlights.html" class="lang-btn active">EN</a>
+    <a href="career-highlights-no.html" class="lang-btn">NO</a>
+  </div>
+
+  <main class="gantt-page">
+    <a href="index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to CV
+    </a>
+
+    <h1 class="page-title">Career Highlights</h1>
+    <p class="page-subtitle">
+      A selection of projects across 4 employers, 2018–2026 &nbsp;·&nbsp;
+      <span style="color:var(--accent)">Click any bar</span> for photos and details.
+    </p>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot bar-drager"></div> Dräger Nordics</div>
+      <div class="legend-item"><div class="legend-dot bar-element"></div> Element Logic</div>
+      <div class="legend-item"><div class="legend-dot bar-accella"></div> Accella Solutions</div>
+      <div class="legend-item"><div class="legend-dot bar-nokut"></div> NOKUT</div>
+    </div>
+
+    <!-- Desktop: Gantt + side panel -->
+    <div class="gantt-layout">
+      <div class="gantt-wrapper">
+        <div class="gantt-inner" id="ganttInner">
+          <div class="gantt-axis" id="ganttAxis"></div>
+          <div class="gantt-rows" id="ganttRows">
+            <div class="gantt-grid-lines" id="gridLines"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gantt-detail" id="detailPanel">
+        <button class="detail-close" id="detailClose">×</button>
+        <div class="detail-title" id="dtTitle"></div>
+        <div class="detail-date" id="dtDate"></div>
+        <ul class="detail-bullets" id="dtBullets"></ul>
+        <div id="dtMediaWrap"></div>
+      </div>
+    </div>
+
+    <!-- Mobile: card list -->
+    <div class="gantt-mobile-list" id="mobileList"></div>
+
+  </main>
+
+  <footer class="footer">
+    <p>Abel Arrouj &copy; 2026</p>
+  </footer>
+
+  <script>
+    const projects = [
+      {
+        label: "Nordic process harmonization",
+        start: "2018-03", end: "2019-02",
+        employer: "drager",
+        bullets: [
+          "Facilitating workshops",
+          "Gather, organize and share insights",
+          "Put together new processes and rollout in the organization"
+        ],
+        media: "pics for portofolio/Nordic process harmonization.jpg"
+      },
+      {
+        label: "Establishment of Nordic system center",
+        start: "2019-02", end: "2019-09",
+        employer: "drager",
+        bullets: [
+          "From production in Germany and UK to producing home in Oslo",
+          "Local engineering of Dräger Nordic solutions — from design to drawing to testing",
+          "Local project management and engineering system",
+          "First project manager + project engineer"
+        ],
+        media: "pics for portofolio/Establishment of Nordic system center.jpg"
+      },
+      {
+        label: "Okmetic oy — Finland",
+        start: "2019-09", end: "2019-10",
+        employer: "drager",
+        bullets: ["Design, production and delivery of two control units and multiple detectors for a silicon production facility"],
+        media: "pics for portofolio/Okmetic oy - Finland.jpg"
+      },
+      {
+        label: "Preem holding AB — Sweden",
+        start: "2019-10", end: "2020-01",
+        employer: "drager",
+        bullets: ["Replacement of a depot gas detection system, both control unit and detectors covering the entire facility"],
+        media: "pics for portofolio/Preem holding.jpg"
+      },
+      {
+        label: "OKEA offshore facility — Norway",
+        start: "2020-02", end: "2020-05",
+        employer: "drager",
+        bullets: ["Delivery of a state-of-the-art, wireless gas detection system to an offshore facility in Norway"],
+        media: "pics for portofolio/OKEA.jpg"
+      },
+      {
+        label: "Fire training container — Norway",
+        start: "2020-06", end: "2020-10",
+        employer: "drager",
+        bullets: ["Delivery and commissioning of a training container for the fire department in Nedre Romerike"],
+        media: "pics for portofolio/Training container.jpg",
+        media2: "pics for portofolio/Training container_2.jpg"
+      },
+      {
+        label: "Renovation of rescue train — Oslo",
+        start: "2020-10", end: "2020-12",
+        employer: "drager",
+        bullets: ["Supporting the Dräger German system center with the renovation of a rescue train in the Oslo region"],
+        media: "pics for portofolio/renovation of rescue train.jpg"
+      },
+      {
+        label: "Control systems for Vaisala — Finland",
+        start: "2020-12", end: "2021-04",
+        employer: "drager",
+        bullets: ["Design, production and delivery of multiple control units and detectors for Vaisala in Finland"],
+        media: "pics for portofolio/vaisala.jpg"
+      },
+      {
+        label: "Rescue chambers — Follo-bane",
+        start: "2021-04", end: "2021-08",
+        employer: "drager",
+        bullets: ["Delivery and commissioning of multiple rescue chambers to ACCIONA"],
+        media: "pics for portofolio/Rescure chamber.jpg"
+      },
+      {
+        label: "Novo Nordisk — Denmark",
+        start: "2021-08", end: "2021-11",
+        employer: "drager",
+        bullets: ["Design, production and delivery of multiple control units and detectors for a medicine production facility in Denmark"],
+        media: "pics for portofolio/novo nordisk.jpg"
+      },
+      {
+        label: "Quartz Corp — Norway",
+        start: "2021-09", end: "2021-10",
+        employer: "drager",
+        bullets: ["Replacement and upgrade of gas detection system, control units and detectors covering major parts of the production facility"],
+        media: "pics for portofolio/Offshore NOV.jpg"
+      },
+      {
+        label: "Livsvitenskapsbygget — Oslo",
+        start: "2021-11", end: "2022-02",
+        employer: "drager",
+        bullets: ["Prosjekteringsbistand for en helhetlig gassdeteksjonsløsning for hele bygget"],
+        media: "pics for portofolio/univ i oslo.jpg"
+      },
+      {
+        label: "AutoStore — Vertical Playground, Oppdal",
+        start: "2022-03", end: "2022-05",
+        employer: "element",
+        bullets: ["AutoStore extension for Vertical Playground"],
+        media: "pics for portofolio/Vertical play ground oppdal.jpg"
+      },
+      {
+        label: "AutoStore — Komplett, Sandefjord",
+        start: "2022-03", end: "2022-08",
+        employer: "element",
+        bullets: ["AutoStore extension — Sandefjord"],
+        media: "pics for portofolio/Komplett.no.jpg"
+      },
+      {
+        label: "AutoStore — Getinspired, Trondheim",
+        start: "2022-05", end: "2022-09",
+        employer: "element",
+        bullets: ["AutoStore extension for Getinspired — Trondheim"],
+        media: "pics for portofolio/getispired.jpg"
+      },
+      {
+        label: "AutoStore — Stingray, Oslo",
+        start: "2022-08", end: "2023-09",
+        employer: "element",
+        bullets: ["AutoStore delivery for Stingray — Oslo"],
+        media: "pics for portofolio/stingray.jpg"
+      },
+      {
+        label: "AutoStore — Sport Holding, Jessheim",
+        start: "2023-02", end: "2024-02",
+        employer: "element",
+        bullets: ["Norway's largest AutoStore installation after XXL"],
+        media: "pics for portofolio/Sportholding.jpg",
+        media2: "pics for portofolio/sport holding 2.mp4",
+        link: "https://www.mtlogistikk.no/fabritius-logistikkeiendom-oslo-logistikkpark-gardermoen/sport-holding-blir-forste-innflytter-i-oslo-logistikkpark-gardermoen/610659"
+      },
+      {
+        label: "AutoStore — MVE, Stavanger",
+        start: "2024-02", end: "2024-09",
+        employer: "element",
+        bullets: ["Norway's first AutoStore with both ambient and refrigerated zones"],
+        media: "pics for portofolio/MVE.jpg",
+        link: "https://www.mtlogistikk.no/automasjon-autostore-element-logic/vil-knuse-plukkrekorder-med-ny-autostore-losning/895375"
+      },
+      {
+        label: "AutoStore — Meny Helt Hjem, Oslo",
+        start: "2024-01", end: "2024-09",
+        employer: "element",
+        bullets: ["Large AutoStore installation for Meny — first e-grocery AutoStore in Norway"],
+        media: "pics for portofolio/Meny.jpg",
+        link: "https://www.elementlogic.net/news/launching-the-first-egrocery-with-autostore-in-norway/"
+      },
+      {
+        label: "PLC deliveries — Oil depots, Norway",
+        start: "2024-09", end: "2025-01",
+        employer: "accella",
+        bullets: ["Multiple PLC deliveries for classified customers in Norway"]
+      },
+      {
+        label: "AI proof of concept — NOKUT, Oslo",
+        start: "2025-03", end: "2025-09",
+        employer: "nokut",
+        bullets: [
+          "Modular system for processing applications using AI with RAG technology",
+          "Vector library built from historical human evaluations",
+          "Any AI model can be plugged in — built on Azure",
+          "GDPR compliance: ROS, DPIA, and LIA analyses"
+        ]
+      },
+      {
+        label: "ISO 27001 & product team — Accella",
+        start: "2025-09", end: "2026-03",
+        employer: "accella",
+        bullets: [
+          "IT security auditing and implementation of ISO 27001 measures in preparation for certification",
+          "Building a development team and sustainable product development processes"
+        ]
+      }
+    ];
+
+    const CHART_START = new Date("2018-01-01");
+    const CHART_END   = new Date("2026-06-01");
+    const totalMs     = CHART_END - CHART_START;
+    const colorMap    = { drager: "bar-drager", element: "bar-element", accella: "bar-accella", nokut: "bar-nokut" };
+    const colorHex    = { drager: "#3b82f6", element: "#10b981", accella: "#d97706", nokut: "#8b5cf6" };
+
+    function dateToPercent(dateStr) {
+      const [y, m] = dateStr.split("-").map(Number);
+      return Math.max(0, Math.min(100, (new Date(y, m - 1, 1) - CHART_START) / totalMs * 100));
+    }
+
+    // ── Axis ──
+    const axis = document.getElementById("ganttAxis");
+    const gridLinesEl = document.getElementById("gridLines");
+    for (let y = 2018; y <= 2026; y++) {
+      const pct = dateToPercent(`${y}-01`);
+      const span = document.createElement("span");
+      span.className = "gantt-year-label" + (y === 2026 ? " current-year" : "");
+      span.textContent = y;
+      span.style.left = pct + "%";
+      axis.appendChild(span);
+
+      const line = document.createElement("div");
+      line.className = "gantt-grid-line";
+      line.style.left = pct + "%";
+      gridLinesEl.appendChild(line);
+    }
+
+    // ── Rows ──
+    const rowsEl = document.getElementById("ganttRows");
+    let activeIdx = null;
+
+    projects.forEach((p, i) => {
+      const left  = dateToPercent(p.start);
+      const width = Math.max(dateToPercent(p.end) - left, 0.8);
+
+      const row = document.createElement("div");
+      row.className = "gantt-row";
+      if (i > 0 && p.employer !== projects[i - 1].employer) row.classList.add("group-start");
+
+      // Label — split on " — "
+      const lbl = document.createElement("div");
+      lbl.className = "gantt-row-label";
+      const parts = p.label.split(" — ");
+      const main = document.createElement("span");
+      main.className = "gantt-row-label-main";
+      main.textContent = parts[0];
+      lbl.appendChild(main);
+      if (parts.length > 1) {
+        const sub = document.createElement("span");
+        sub.className = "gantt-row-label-sub";
+        sub.textContent = parts.slice(1).join(" — ");
+        lbl.appendChild(sub);
+      }
+
+      const barArea = document.createElement("div");
+      barArea.className = "gantt-bar-area";
+
+      const bar = document.createElement("div");
+      bar.className = `gantt-bar ${colorMap[p.employer]}`;
+      bar.style.left  = left + "%";
+      bar.style.width = width + "%";
+
+      barArea.appendChild(bar);
+      row.appendChild(lbl);
+      row.appendChild(barArea);
+      rowsEl.appendChild(row);
+
+      bar.addEventListener("click", () => toggleDetail(i, row, bar));
+    });
+
+    // ── Detail panel ──
+    const panel    = document.getElementById("detailPanel");
+    const dtTitle  = document.getElementById("dtTitle");
+    const dtDate   = document.getElementById("dtDate");
+    const dtBullets= document.getElementById("dtBullets");
+    const dtMedia  = document.getElementById("dtMediaWrap");
+
+    document.getElementById("detailClose").addEventListener("click", closeDetail);
+
+    function toggleDetail(i, row, bar) {
+      if (activeIdx === i) { closeDetail(); return; }
+      // Deactivate previous
+      closeDetail();
+      activeIdx = i;
+      const p = projects[i];
+
+      // Highlight row + bar
+      row.classList.add("active");
+      bar.classList.add("active");
+
+      // Fill panel
+      dtTitle.textContent = p.label;
+      dtDate.textContent  = `${p.start.replace("-","/")} — ${p.end.replace("-","/")}`;
+      dtBullets.innerHTML = "";
+      (p.bullets || []).forEach(b => {
+        const li = document.createElement("li");
+        li.textContent = b;
+        dtBullets.appendChild(li);
+      });
+
+      dtMedia.innerHTML = "";
+      if (p.media) {
+        appendMedia(dtMedia, p.media, p.label);
+      }
+      if (p.media2) {
+        appendMedia(dtMedia, p.media2, p.label + " 2");
+      }
+      if (p.link) {
+        const a = document.createElement("a");
+        a.href = p.link;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.className = "detail-link";
+        a.textContent = "Read more ↗";
+        dtMedia.appendChild(a);
+      }
+
+      panel.classList.add("visible");
+      panel._activeRow = row;
+      panel._activeBar = bar;
+    }
+
+    function closeDetail() {
+      if (panel._activeRow) panel._activeRow.classList.remove("active");
+      if (panel._activeBar) panel._activeBar.classList.remove("active");
+      panel.classList.remove("visible");
+      panel._activeRow = null;
+      panel._activeBar = null;
+      activeIdx = null;
+    }
+
+    function appendMedia(container, src, alt) {
+      if (src.endsWith(".mp4") || src.endsWith(".webm")) {
+        const v = document.createElement("video");
+        v.src = src; v.className = "detail-media";
+        v.autoplay = true; v.muted = true; v.loop = true; v.playsInline = true;
+        container.appendChild(v);
+      } else {
+        const img = document.createElement("img");
+        img.src = src; img.className = "detail-media"; img.alt = alt;
+        container.appendChild(img);
+      }
+    }
+
+    // ── Mobile cards ──
+    const mobileList = document.getElementById("mobileList");
+    projects.forEach((p, i) => {
+      const card = document.createElement("div");
+      card.className = "mobile-card";
+      card.style.borderLeftColor = colorHex[p.employer];
+
+      const header = document.createElement("div");
+      header.className = "mobile-card-header";
+      header.innerHTML = `
+        <span class="mobile-card-title">${p.label}</span>
+        <span class="mobile-card-date">${p.start.replace("-","/")} — ${p.end.replace("-","/")}</span>
+      `;
+
+      const body = document.createElement("div");
+      body.className = "mobile-card-body";
+      const ul = document.createElement("ul");
+      (p.bullets || []).forEach(b => {
+        const li = document.createElement("li");
+        li.textContent = b;
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+      if (p.media) appendMobileMedia(body, p.media);
+      if (p.media2) appendMobileMedia(body, p.media2);
+      if (p.link) {
+        const a = document.createElement("a");
+        a.href = p.link; a.target = "_blank"; a.rel = "noopener";
+        a.textContent = "Read more ↗";
+        body.appendChild(a);
+      }
+
+      header.addEventListener("click", () => card.classList.toggle("open"));
+      card.appendChild(header);
+      card.appendChild(body);
+      mobileList.appendChild(card);
+    });
+
+    function appendMobileMedia(container, src) {
+      if (src.endsWith(".mp4") || src.endsWith(".webm")) {
+        const v = document.createElement("video");
+        v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.controls = true;
+        container.appendChild(v);
+      } else {
+        const img = document.createElement("img");
+        img.src = src; img.alt = "";
+        container.appendChild(img);
+      }
+    }
+  </script>
+
+</body>
+</html>
