@@ -207,25 +207,33 @@
     .bar-accella { background: #d97706; }
     .bar-nokut   { background: #8b5cf6; }
 
-    /* ── Side panel ── */
+    /* ── Overlay backdrop ── */
+    .gantt-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .gantt-overlay.visible {
+      display: flex;
+    }
+
+    /* ── Detail panel (centred popup) ── */
     .gantt-detail {
-      width: 280px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 80px;
+      position: relative;
+      width: 520px;
+      max-width: 92vw;
+      max-height: 85vh;
+      overflow-y: auto;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.09);
-      padding: 1.2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-      align-self: flex-start;
-    }
-    .gantt-detail.visible {
-      opacity: 1;
-      pointer-events: auto;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      padding: 1.8rem;
+      z-index: 201;
     }
 
     .detail-close {
@@ -382,7 +390,6 @@
     }
 
     @media (max-width: 900px) and (min-width: 641px) {
-      .gantt-detail   { display: none; }
       .gantt-axis     { padding-left: 140px; }
       .gantt-grid-lines { left: 140px; }
       .gantt-row-label { width: 140px; }
@@ -420,7 +427,7 @@
       <div class="legend-item"><div class="legend-dot bar-nokut"></div> NOKUT</div>
     </div>
 
-    <!-- Desktop: Gantt + side panel -->
+    <!-- Desktop: Gantt -->
     <div class="gantt-layout">
       <div class="gantt-wrapper">
         <div class="gantt-inner" id="ganttInner">
@@ -430,7 +437,10 @@
           </div>
         </div>
       </div>
+    </div>
 
+    <!-- Overlay modal -->
+    <div class="gantt-overlay" id="ganttOverlay">
       <div class="gantt-detail" id="detailPanel">
         <button class="detail-close" id="detailClose">×</button>
         <div class="detail-title" id="dtTitle"></div>
@@ -698,6 +708,7 @@
     });
 
     // ── Detail panel ──
+    const overlay  = document.getElementById("ganttOverlay");
     const panel    = document.getElementById("detailPanel");
     const dtTitle  = document.getElementById("dtTitle");
     const dtDate   = document.getElementById("dtDate");
@@ -705,6 +716,7 @@
     const dtMedia  = document.getElementById("dtMediaWrap");
 
     document.getElementById("detailClose").addEventListener("click", closeDetail);
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeDetail(); });
 
     function toggleDetail(i, row, bar) {
       if (activeIdx === i) { closeDetail(); return; }
@@ -744,17 +756,17 @@
         dtMedia.appendChild(a);
       }
 
-      panel.classList.add("visible");
-      panel._activeRow = row;
-      panel._activeBar = bar;
+      overlay.classList.add("visible");
+      overlay._activeRow = row;
+      overlay._activeBar = bar;
     }
 
     function closeDetail() {
-      if (panel._activeRow) panel._activeRow.classList.remove("active");
-      if (panel._activeBar) panel._activeBar.classList.remove("active");
-      panel.classList.remove("visible");
-      panel._activeRow = null;
-      panel._activeBar = null;
+      if (overlay._activeRow) overlay._activeRow.classList.remove("active");
+      if (overlay._activeBar) overlay._activeBar.classList.remove("active");
+      overlay.classList.remove("visible");
+      overlay._activeRow = null;
+      overlay._activeBar = null;
       activeIdx = null;
     }
 
