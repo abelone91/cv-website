@@ -456,30 +456,38 @@ body {
    LOGOS
    =========================== */
 .company-logo {
-  height: 18px;
+  height: 44px;
   width: auto;
+  max-width: 160px;
   object-fit: contain;
-  vertical-align: middle;
   opacity: 0.85;
-  margin-left: 0.4rem;
-  display: inline-block;
+  display: block;
+  margin-top: 0.3rem;
 }
 
 .edu-logo {
-  height: 32px;
+  height: 44px;
   width: auto;
+  max-width: 160px;
   object-fit: contain;
-  flex-shrink: 0;
   opacity: 0.85;
 }
 
 .cert-logo {
-  height: 20px;
+  height: 36px;
   width: auto;
+  max-width: 130px;
   object-fit: contain;
-  vertical-align: middle;
   opacity: 0.85;
-  margin-right: 0.5rem;
+  display: block;
+  flex-shrink: 0;
+}
+
+
+/* Element Logic logo has lots of whitespace — scale it up */
+img[alt="Element Logic"] {
+  height: 64px;
+  max-width: 200px;
 }
 
 /* ===========================
