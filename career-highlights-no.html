@@ -6,7 +6,7 @@
   <title>Karrierehøydepunkter — Abel Arrouj</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
     .gantt-page {
@@ -26,11 +26,12 @@
     }
     .back-link:hover { color: var(--accent); }
     .page-title {
-      font-size: 2.2rem;
+      font-family: var(--font-display);
+      font-size: 3rem;
       font-weight: 300;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
       color: var(--text-primary);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
     .page-subtitle {
       font-size: 0.9rem;
@@ -118,8 +119,8 @@
       transition: background 0.15s;
     }
     .gantt-row:last-child { border-bottom: none; }
-    .gantt-row:nth-child(even) { background: rgba(0,0,0,0.018); }
-    .gantt-row.active { background: var(--accent-light) !important; }
+    .gantt-row:nth-child(even) { background: rgba(255,255,255,0.018); }
+    .gantt-row.active { background: var(--accent-dim) !important; }
     .gantt-row.active .gantt-row-label-main { color: var(--text-primary); font-weight: 500; }
     .gantt-row.group-start { border-top: 2px solid var(--border); }
     .gantt-row-label {
@@ -131,8 +132,8 @@
       z-index: 2;
       background: inherit;
     }
-    .gantt-row:nth-child(even) .gantt-row-label { background: rgba(249,249,247,0.98); }
-    .gantt-row.active .gantt-row-label { background: var(--accent-light); }
+    .gantt-row:nth-child(even) .gantt-row-label { background: rgba(28,27,24,0.98); }
+    .gantt-row.active .gantt-row-label { background: var(--accent-dim); }
     .gantt-row-label-main {
       display: block;
       font-size: 0.75rem;
@@ -154,22 +155,24 @@
     }
     @keyframes bar-breathe {
       0%   { box-shadow: none; }
-      50%  { box-shadow: 0 0 0 2px rgba(255,255,255,0.8), 0 0 0 4px rgba(0,0,0,0.2); }
+      50%  { box-shadow: 0 0 8px rgba(201,168,76,0.4), 0 0 0 2px rgba(201,168,76,0.2); }
       100% { box-shadow: none; }
     }
     .gantt-bar {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      height: 18px;
-      border-radius: 4px;
+      height: 16px;
+      border-radius: 3px;
       cursor: pointer;
       transition: height 0.15s, box-shadow 0.15s;
       animation: bar-breathe 1.4s ease-in-out 0.8s 2;
+      opacity: 0.85;
     }
     .gantt-bar:hover, .gantt-bar.active {
-      height: 22px;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.9), 0 0 0 4px currentColor;
+      height: 20px;
+      opacity: 1;
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 4px 12px rgba(0,0,0,0.4);
     }
     .bar-drager  { background: #3b82f6; }
     .bar-element { background: #10b981; }
@@ -217,17 +220,21 @@
     }
     .detail-close:hover { color: var(--text-primary); }
     .detail-title {
-      font-size: 0.85rem;
-      font-weight: 500;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
       color: var(--text-primary);
-      margin-bottom: 0.25rem;
-      line-height: 1.3;
+      margin-bottom: 0.3rem;
+      line-height: 1.25;
       padding-right: 1.5rem;
     }
     .detail-date {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-bottom: 0.8rem;
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
     }
     .detail-bullets {
       list-style: none;
@@ -261,16 +268,19 @@
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
       font-weight: 500;
+      letter-spacing: 0.04em;
       color: var(--accent);
-      background: var(--accent-light);
-      padding: 0.3rem 0.65rem;
-      border-radius: 4px;
-      margin-top: 0.2rem;
+      border: 1px solid var(--accent);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      margin-top: 0.4rem;
       text-decoration: none;
+      transition: background 0.2s;
     }
-    .detail-link:hover { background: #bfdbfe; }
+    .detail-link:hover { background: var(--accent-dim); }
     .gantt-mobile-list {
       display: none;
       flex-direction: column;
@@ -292,7 +302,7 @@
       cursor: pointer;
       user-select: none;
     }
-    .mobile-card-header:hover { background: var(--bg); }
+    .mobile-card-header:hover { background: var(--surface-2); }
     .mobile-card-title {
       font-size: 0.85rem;
       font-weight: 500;
@@ -542,6 +552,13 @@
         bullets: ["Stor AutoStore-installasjon for Meny — Norges første AutoStore for e-dagligvare"],
         media: "pics for portofolio/Meny.jpg",
         link: "https://www.elementlogic.net/news/launching-the-first-egrocery-with-autostore-in-norway/"
+      },
+      {
+        label: "AutoStore + AI-sorter — Kitchn', Oslo",
+        start: "2024-04", end: "2024-09",
+        employer: "element",
+        bullets: ["Det første AI-drevne sorteringssystemet som jobber i tandem med AutoStore"],
+        link: "https://www.elementlogic.net/no/cases/en-innovativ-losning-fra-element-logic-automatiserer-kitchn-og-tilbords-sin-forsyningskjede/"
       },
       {
         label: "PLC-leveranser — Oljedepoter, Norge",
