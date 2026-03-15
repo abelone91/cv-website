@@ -453,6 +453,36 @@ body {
 }
 
 /* ===========================
+   LOGOS
+   =========================== */
+.company-logo {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+  opacity: 0.85;
+  margin-left: 0.4rem;
+  display: inline-block;
+}
+
+.edu-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.cert-logo {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+  opacity: 0.85;
+  margin-right: 0.5rem;
+}
+
+/* ===========================
    PORTFOLIO
    =========================== */
 .portfolio-link {
