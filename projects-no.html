@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Abel Arrouj — Private Projects</title>
+  <title>Abel Arrouj — Private prosjekter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -90,12 +90,6 @@
       margin-top: 1.4rem;
     }
 
-    .project-desc {
-      font-size: 0.84rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
     .project-bullets {
       list-style: none;
       padding: 0;
@@ -147,19 +141,19 @@
 <body>
   <!-- Language toggle -->
   <div class="lang-toggle">
-    <a href="projects.html" class="lang-btn active">EN</a>
-    <a href="projects-no.html" class="lang-btn">NO</a>
+    <a href="projects.html" class="lang-btn">EN</a>
+    <a href="projects-no.html" class="lang-btn active">NO</a>
   </div>
 
   <main class="container">
-    <a href="index.html" class="back-link anim-1">
+    <a href="index-no.html" class="back-link anim-1">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to CV
+      Tilbake til CV
     </a>
 
     <header class="anim-1" style="margin-bottom:3rem">
-      <h1 style="font-family:var(--font-display);font-size:3rem;font-weight:300;color:var(--text-primary);line-height:0.95;margin-bottom:0.6rem">Private Projects</h1>
-      <p style="font-size:0.8rem;font-family:var(--font-mono);color:var(--accent);letter-spacing:0.06em;text-transform:uppercase">Personal work built outside of office hours</p>
+      <h1 style="font-family:var(--font-display);font-size:3rem;font-weight:300;color:var(--text-primary);line-height:0.95;margin-bottom:0.6rem">Private prosjekter</h1>
+      <p style="font-size:0.8rem;font-family:var(--font-mono);color:var(--accent);letter-spacing:0.06em;text-transform:uppercase">Personlige prosjekter bygget på fritiden</p>
     </header>
 
     <div class="divider anim-2"></div>
@@ -169,29 +163,29 @@
       <!-- AI Jobs Tracker -->
       <div class="project-card">
         <div class="project-header">
-          <h2 class="project-title">Norwegian AI Jobs Tracker</h2>
+          <h2 class="project-title">Norsk AI-jobbtracker</h2>
           <a href="https://aivarsel.netlify.app/" target="_blank" class="project-url">aivarsel.netlify.app ↗</a>
         </div>
-        <p class="project-tagline">A full-stack web application that automatically tracks and analyzes AI-related job postings in the Norwegian market.</p>
+        <p class="project-tagline">En fullstack webapplikasjon som automatisk sporer og analyserer AI-relaterte stillingsutlysninger i det norske arbeidsmarkedet.</p>
 
-        <div class="project-section-label">What it does</div>
+        <div class="project-section-label">Hva det gjør</div>
         <ul class="project-bullets">
-          <li>Every morning at 06:00 UTC, a scheduled serverless function fetches all new job postings published that day from NAV (Norway's official labor registry) via their authenticated feed API.</li>
-          <li>Each job is sent to an LLM for classification — the model reads the job title, full description, and occupational category, then determines whether the role is AI-related and assigns it a type (engineer, analyst, researcher, manager, consultant).</li>
-          <li>Results are stored in a Postgres database and aggregated into daily snapshots tracking counts, top employers, and locations.</li>
-          <li>The public dashboard displays trend charts of new AI jobs per day, a breakdown by role type, top hiring companies, top municipalities, and a live feed of the most recent active listings.</li>
+          <li>Hver morgen kl. 06:00 UTC henter en planlagt serverless-funksjon alle nye stillingsutlysninger publisert den dagen fra NAV via deres autentiserte feed-API.</li>
+          <li>Hver stilling sendes til en LLM for klassifisering — modellen leser stillingstittel, full beskrivelse og yrkeskategori, og avgjør om rollen er AI-relatert og tildeler en type (ingeniør, analytiker, forsker, leder, konsulent).</li>
+          <li>Resultatene lagres i en Postgres-database og aggregeres til daglige snapshots med antall, topp-arbeidsgivere og lokasjoner.</li>
+          <li>Det offentlige dashbordet viser trendgrafer over nye AI-stillinger per dag, fordeling per rolletype, topp-arbeidsgivere, topp-kommuner og en live-feed av de nyeste aktive utlysningene.</li>
         </ul>
 
-        <div class="project-section-label">Key implementation details</div>
+        <div class="project-section-label">Viktige implementasjonsdetaljer</div>
         <ul class="project-bullets">
-          <li>Feed pagination uses a persistent cursor stored in the database, allowing the daily sync to resume exactly where it left off across invocations.</li>
-          <li>Job details are fetched in parallel from the NAV detail endpoint to retrieve full descriptions before classification.</li>
-          <li>HTML is stripped from job descriptions before sending to the LLM.</li>
-          <li>Inactive listings are flagged promptly in the database per NAV's terms of use.</li>
-          <li>A separate pipeline monitoring page provides real-time visibility into sync status, classification counts, and a live table of processed jobs with AI verdicts and reasoning.</li>
+          <li>Feed-paginering bruker en persistent markør lagret i databasen, slik at den daglige synkroniseringen kan fortsette nøyaktig der den slapp på tvers av kjøringer.</li>
+          <li>Stillingsdetaljer hentes parallelt fra NAVs detaljendepunkt for å hente fulle beskrivelser før klassifisering.</li>
+          <li>HTML strippes fra stillingsbeskrivelsene før de sendes til LLM-en.</li>
+          <li>Inaktive utlysninger flagges raskt i databasen i henhold til NAVs bruksvilkår.</li>
+          <li>En separat pipeline-overvåkingsside gir sanntidsinnsikt i synkroniseringsstatus, klassifiseringsantall og en live-tabell over behandlede stillinger med AI-vurderinger og begrunnelser.</li>
         </ul>
 
-        <div class="project-section-label">Tech stack</div>
+        <div class="project-section-label">Teknologistabel</div>
         <div class="tech-stack">
           <span class="tech-tag">React</span>
           <span class="tech-tag">Vite</span>
