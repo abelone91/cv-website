@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abel Arrouj — Private Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      margin-bottom: 3rem;
+    }
+    .back-link:hover { color: var(--accent); }
+    .back-link svg { width: 12px; height: 12px; }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 2rem 1.8rem;
+      margin-bottom: 2rem;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .project-url {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+    }
+    .project-url:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .project-tagline {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.6rem;
+      line-height: 1.6;
+    }
+
+    .project-section-label {
+      font-size: 0.6rem;
+      font-weight: 500;
+      font-family: var(--font-mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.7rem;
+      margin-top: 1.4rem;
+    }
+
+    .project-desc {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .project-bullets {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .project-bullets li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.65;
+    }
+    .project-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 1rem;
+      line-height: 1.4;
+      opacity: 0.7;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.7rem;
+    }
+    .tech-tag {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      padding: 0.22rem 0.55rem;
+      border-radius: 2px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+    }
+    .tech-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+  </style>
+</head>
+<body>
+  <!-- Language toggle -->
+  <div class="lang-toggle">
+    <a href="index.html" class="lang-btn active">EN</a>
+    <a href="index-no.html" class="lang-btn">NO</a>
+  </div>
+
+  <main class="container">
+    <a href="index.html" class="back-link anim-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to CV
+    </a>
+
+    <header class="anim-1" style="margin-bottom:3rem">
+      <h1 style="font-family:var(--font-display);font-size:3rem;font-weight:300;color:var(--text-primary);line-height:0.95;margin-bottom:0.6rem">Private Projects</h1>
+      <p style="font-size:0.8rem;font-family:var(--font-mono);color:var(--accent);letter-spacing:0.06em;text-transform:uppercase">Personal work built outside of office hours</p>
+    </header>
+
+    <div class="divider anim-2"></div>
+
+    <section class="anim-3">
+
+      <!-- AI Jobs Tracker -->
+      <div class="project-card">
+        <div class="project-header">
+          <h2 class="project-title">Norwegian AI Jobs Tracker</h2>
+          <a href="https://aivarsel.netlify.app/" target="_blank" class="project-url">aivarsel.netlify.app ↗</a>
+        </div>
+        <p class="project-tagline">A full-stack web application that automatically tracks and analyzes AI-related job postings in the Norwegian market.</p>
+
+        <div class="project-section-label">What it does</div>
+        <ul class="project-bullets">
+          <li>Every morning at 06:00 UTC, a scheduled serverless function fetches all new job postings published that day from NAV (Norway's official labor registry) via their authenticated feed API.</li>
+          <li>Each job is sent to an LLM for classification — the model reads the job title, full description, and occupational category, then determines whether the role is AI-related and assigns it a type (engineer, analyst, researcher, manager, consultant).</li>
+          <li>Results are stored in a Postgres database and aggregated into daily snapshots tracking counts, top employers, and locations.</li>
+          <li>The public dashboard displays trend charts of new AI jobs per day, a breakdown by role type, top hiring companies, top municipalities, and a live feed of the most recent active listings.</li>
+        </ul>
+
+        <div class="project-section-label">Key implementation details</div>
+        <ul class="project-bullets">
+          <li>Feed pagination uses a persistent cursor stored in the database, allowing the daily sync to resume exactly where it left off across invocations.</li>
+          <li>Job details are fetched in parallel from the NAV detail endpoint to retrieve full descriptions before classification.</li>
+          <li>HTML is stripped from job descriptions before sending to the LLM.</li>
+          <li>Inactive listings are flagged promptly in the database per NAV's terms of use.</li>
+          <li>A separate pipeline monitoring page provides real-time visibility into sync status, classification counts, and a live table of processed jobs with AI verdicts and reasoning.</li>
+        </ul>
+
+        <div class="project-section-label">Tech stack</div>
+        <div class="tech-stack">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Vite</span>
+          <span class="tech-tag">Recharts</span>
+          <span class="tech-tag">Tailwind CSS</span>
+          <span class="tech-tag">Netlify</span>
+          <span class="tech-tag">Serverless Functions</span>
+          <span class="tech-tag">TypeScript / ESM</span>
+          <span class="tech-tag">Supabase (PostgreSQL)</span>
+          <span class="tech-tag">Ollama Cloud API</span>
+          <span class="tech-tag">NAV Stilling Feed API</span>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Abel Arrouj &copy; 2026</p>
+  </footer>
+</body>
+</html>
