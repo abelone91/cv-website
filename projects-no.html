@@ -200,6 +200,42 @@
         </div>
       </div>
 
+      <!-- DIY Robot Arm med Hailo-8 -->
+      <div class="project-card">
+        <div class="project-header">
+          <h2 class="project-title">DIY Robotarm — YOLOv8 + Hailo-8</h2>
+          <a href="https://github.com/abelone91/diy_robot_arm_hailo8" target="_blank" class="project-url">github ↗</a>
+        </div>
+        <p class="project-tagline">En sanntids datasynspipeline som lar en desktop-robotarm autonomt oppdage og spore kuber ved hjelp av et egentrent nevralt nettverk akselerert av en dedikert NPU.</p>
+
+        <div class="project-section-label">Hva det gjør</div>
+        <ul class="project-bullets">
+          <li>Et kamerabilde behandles av en YOLOv8s-modell som kjører på en Hailo-8 M.2 NPU koblet til en Raspberry Pi 5, og oppnår 15–30 FPS sammenlignet med 1–2 FPS på Pi-prosessoren alene.</li>
+          <li>Oppdagede kubeposisjoner mappes fra pikselkoordinater til robotens arbeidsrom-XYZ via homografi og RBF-interpolasjon, og sendes deretter som G-kode-bevegelseskommandoer til en Arduino-styrt 4-DOF-arm.</li>
+          <li>En tretrådsarkitektur separerer bildeopptak, NPU-inferens og kommandoutsending for å opprettholde sanntidsgjennom­strømming.</li>
+        </ul>
+
+        <div class="project-section-label">Viktige implementasjonsdetaljer</div>
+        <ul class="project-bullets">
+          <li>Modellen ble trent på 119 annoterte bilder (80/20-fordeling) og oppnådde 91,7 % mAP50 etter 100 epoker; konvertert fra PyTorch → ONNX → HAR → HEF for Hailo-runtimen.</li>
+          <li>INT8-kvantisering nullet opprinnelig ut klasseskåre-hodene på grunn av mettede nullpunkter — løst ved å kalibrere med tilfeldig uniform støy i stedet for ekte bilder.</li>
+          <li>Etterbehandling (DFL-dekoding, sigmoid, NMS) kjører på Pi-prosessoren, mens Hailo-8 håndterer det nevrale nettverkets backbone og deteksjonshoder.</li>
+          <li>Kommandoer videresendes fra Pi til en Windows-vert over TCP, og relées deretter til Arduino via seriell kommunikasjon på 115200 baud.</li>
+        </ul>
+
+        <div class="project-section-label">Teknologistabel</div>
+        <div class="tech-stack">
+          <span class="tech-tag">Raspberry Pi 5</span>
+          <span class="tech-tag">Hailo-8 NPU</span>
+          <span class="tech-tag">YOLOv8</span>
+          <span class="tech-tag">OpenCV</span>
+          <span class="tech-tag">picamera2</span>
+          <span class="tech-tag">SciPy RBFInterpolator</span>
+          <span class="tech-tag">Arduino / G-kode</span>
+          <span class="tech-tag">Python</span>
+        </div>
+      </div>
+
     </section>
   </main>
 

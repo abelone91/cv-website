@@ -206,6 +206,42 @@
         </div>
       </div>
 
+      <!-- DIY Robot Arm with Hailo-8 -->
+      <div class="project-card">
+        <div class="project-header">
+          <h2 class="project-title">DIY Robot Arm — YOLOv8 + Hailo-8</h2>
+          <a href="https://github.com/abelone91/diy_robot_arm_hailo8" target="_blank" class="project-url">github ↗</a>
+        </div>
+        <p class="project-tagline">A real-time computer vision pipeline that lets a desktop robot arm autonomously detect and track cubes using a custom-trained neural network accelerated by a dedicated NPU.</p>
+
+        <div class="project-section-label">What it does</div>
+        <ul class="project-bullets">
+          <li>A camera feed is processed by a YOLOv8s model running on a Hailo-8 M.2 NPU attached to a Raspberry Pi 5, achieving 15–30 FPS versus 1–2 FPS on the Pi CPU alone.</li>
+          <li>Detected cube positions are mapped from pixel coordinates to robot workspace XYZ via homography and RBF interpolation, then sent as G-code movement commands to an Arduino-controlled 4-DOF arm.</li>
+          <li>A three-thread architecture separates frame capture, NPU inference, and command dispatch to sustain real-time throughput.</li>
+        </ul>
+
+        <div class="project-section-label">Key implementation details</div>
+        <ul class="project-bullets">
+          <li>Model trained on 119 annotated images (80/20 split), achieving 91.7% mAP50 after 100 epochs; converted from PyTorch → ONNX → HAR → HEF for the Hailo runtime.</li>
+          <li>INT8 quantization initially deadened class-score heads due to saturated zero-points — fixed by calibrating with random uniform noise instead of real images.</li>
+          <li>Post-processing (DFL decode, sigmoid, NMS) runs on the Pi CPU while the Hailo-8 handles the neural network backbone and detection heads.</li>
+          <li>Commands are forwarded from the Pi to a Windows host over TCP, then relayed to the Arduino via serial at 115200 baud.</li>
+        </ul>
+
+        <div class="project-section-label">Tech stack</div>
+        <div class="tech-stack">
+          <span class="tech-tag">Raspberry Pi 5</span>
+          <span class="tech-tag">Hailo-8 NPU</span>
+          <span class="tech-tag">YOLOv8</span>
+          <span class="tech-tag">OpenCV</span>
+          <span class="tech-tag">picamera2</span>
+          <span class="tech-tag">SciPy RBFInterpolator</span>
+          <span class="tech-tag">Arduino / G-code</span>
+          <span class="tech-tag">Python</span>
+        </div>
+      </div>
+
     </section>
   </main>
 
